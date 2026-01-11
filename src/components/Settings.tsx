@@ -1,4 +1,4 @@
-import { Button } from './ui/button'; import { Input } from './ui/input'; import { Label } from './ui/label'; import { Switch } from './ui/switch'; import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router';
+import React from 'react'; import { Button } from './ui/button'; import { Input } from './ui/input'; import { Label } from './ui/label'; import { Switch } from './ui/switch'; import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router';
 
 export default function Settings() {
   const { user } = useAuth();

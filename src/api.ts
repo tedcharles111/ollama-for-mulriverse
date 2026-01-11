@@ -1,8 +1,5 @@
 import { Ollama } from 'ollama';
 
-// Ensure Ollama client for online interactions
-const onlineOllama = new Ollama({ host: 'https://api.ollama.com' });
-
 export interface Model {
   name: string;
   size: number;
@@ -27,7 +24,7 @@ export async function fetchOnlineModels(): Promise<Model[]> {
     const data = await response.json();
     return data.models.map((model: any) => ({
       ...model,
-      modified_at: model.modified_at.toString(), // Ensure string type
+      modified_at: model.modified_at.toString(),
       isLocal: false
     }));
   } catch (error) {
@@ -38,12 +35,11 @@ export async function fetchOnlineModels(): Promise<Model[]> {
 
 export async function fetchLocalModels(): Promise<Model[]> {
   try {
-    // This client assumes local Ollama server is running on default port
     const localOllama = new Ollama({ host: 'http://localhost:11434' });
     const response = await localOllama.list();
     return response.models.map(model => ({
       ...model,
-      modified_at: model.modified_at.toString(), // Ensure string type
+      modified_at: model.modified_at.toString(),
       isLocal: true
     }));
   } catch (error) {
@@ -53,7 +49,6 @@ export async function fetchLocalModels(): Promise<Model[]> {
 }
 
 export async function downloadModel(modelName: string): Promise<void> {
-  // Use a local Ollama client to pull models
   const localOllama = new Ollama({ host: 'http://localhost:11434' });
   await localOllama.pull({ model: modelName });
 }

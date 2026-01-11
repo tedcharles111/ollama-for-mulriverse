@@ -1,13 +1,12 @@
-import React from 'react'; // Keep React import for useState import { Button } from './ui/button'; import { Input } from './ui/input'; import { Label } from './ui/label'; // Ensure this path is correct import { Switch } from './ui/switch'; // Ensure this path is correct import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router';
+import { Button } from './ui/button'; import { Input } from './ui/input'; import { Label } from './ui/label'; import { Switch } from './ui/switch'; import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router';
 
 export default function Settings() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [apiEndpoint, setApiEndpoint] = React.useState('https://api.ollama.com');
   const [useLocalModels, setUseLocalModels] = React.useState(false);
 
   const handleSave = () => {
-    // Save settings to localStorage or backend
-    localStorage.setItem('ollamaApiEndpoint', apiEndpoint); localStorage.setItem('useLocalModels', useLocalModels.toString()); alert('Settings saved!'); // Basic feedback
+    localStorage.setItem('ollamaApiEndpoint', apiEndpoint); localStorage.setItem('useLocalModels', useLocalModels.toString()); alert('Settings saved!');
   };
 
   return (
@@ -23,7 +22,7 @@ export default function Settings() {
           <div>
             <Label htmlFor="apiEndpoint">Ollama API Endpoint</Label>
             <Input
-              id="apiEndpoint" type="url" // Changed to url type for better input validation
+              id="apiEndpoint" type="url"
               value={apiEndpoint}
               onChange={(e) => setApiEndpoint(e.target.value)}
               className="mt-1"
@@ -38,7 +37,7 @@ export default function Settings() {
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-4"> <Link to="/"> {/* Link back to home or previous page */} <Button variant="outline">Cancel</Button>
+          <div className="flex justify-end gap-2 pt-4"> <Link to="/"> <Button variant="outline">Cancel</Button>
             </Link>
             <Button onClick={handleSave}>Save</Button>
           </div>

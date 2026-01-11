@@ -1,9 +1,8 @@
-import React, { useState } from 'react'; import { Button } from './ui/button'; import { Input } from './ui/input'; import { Send, Paperclip } from 'lucide-react'; // import { useAuth } from '../contexts/AuthContext'; // 'user' is unused, so commented out import { useOnlineModels } from '../contexts/OnlineModelsContext'; import { generateChatCompletion } from '../api'; import { useToast } from './ui/use-toast';
+import { useState } from 'react'; import { Button } from './ui/button'; import { Input } from './ui/input'; import { Send, Paperclip } from 'lucide-react'; import { useOnlineModels } from '../contexts/OnlineModelsContext'; import { generateChatCompletion } from '../api'; import { useToast } from './ui/use-toast';
 
 export default function ChatForm() {
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  // const { user } = useAuth(); // Removed as it was declared but never read.
   const { localModels } = useOnlineModels();
   const { toast } = useToast();
 
@@ -14,10 +13,7 @@ export default function ChatForm() {
     setIsLoading(true);
 
     try {
-      // In a real app, you would get the selected model from context/settings
       const selectedModel = localModels.length > 0 ? localModels[0].name : 'llama2';
-
-      // Check if model is available locally
       const isLocal = localModels.some(model => model.name === selectedModel);
 
       await generateChatCompletion(
@@ -26,8 +22,7 @@ export default function ChatForm() {
           { role: 'user', content: message }
         ],
         isLocal,
-        (chunk: string) => { // Explicitly type 'chunk' as string
-          // In a real app, you would stream this to the message list
+        (chunk: string) => {
           console.log(chunk);
         }
       );

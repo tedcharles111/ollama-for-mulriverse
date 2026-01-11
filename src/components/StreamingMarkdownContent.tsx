@@ -1,4 +1,4 @@
-import ReactMarkdown from 'react-markdown'; // Removed React as it's not strictly needed for JSX in modern React
+import ReactMarkdown from 'react-markdown';
 
 interface StreamingMarkdownContentProps {
   content: string;

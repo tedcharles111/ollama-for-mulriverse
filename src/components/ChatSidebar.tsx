@@ -1,4 +1,4 @@
-import { Button } from './ui/button'; import { Plus, Settings } from 'lucide-react'; // Removed MessageSquare as it's unused import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router'; // Import Link for navigation
+import { Button } from './ui/button'; import { Plus, Settings } from 'lucide-react'; // Import Settings for the button import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router'; // Import Link for navigation
 
 export default function ChatSidebar() {
   const { logout } = useAuth();
@@ -28,7 +28,9 @@ export default function ChatSidebar() {
           </Link>
         ))}
       </div>
-      <div className="p-4 border-t border-gray-200 space-y-2"> <Link to="/settings" className="block w-full"> <Button variant="ghost" className="w-full justify-start"> <Settings className="mr-2 h-4 w-4" />
+      <div className="p-4 border-t border-gray-200 space-y-2">
+        {/* Correct Link usage for navigation */}
+        <Link to="/settings" className="block w-full"> <Button variant="ghost" className="w-full justify-start"> <Settings className="mr-2 h-4 w-4" />
             Settings
           </Button>
         </Link>

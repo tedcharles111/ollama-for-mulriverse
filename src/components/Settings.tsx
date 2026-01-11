@@ -1,8 +1,7 @@
-import React from 'react'; import { Button } from './ui/button'; import { Input } from './ui/input'; import { Label } from './ui/label'; import { Switch } from './ui/switch'; import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router';
+import React from 'react'; // Keep React import for useState import { Button } from './ui/button'; import { Input } from './ui/input'; import { Label } from './ui/label'; // Import Label import { Switch } from './ui/switch'; // Import Switch import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router';
 
 export default function Settings() {
-  const { user } = useAuth();
-  const [apiEndpoint, setApiEndpoint] = React.useState('https://api.ollama.com');
+  const { user } = useAuth(); // Removed 'logout' as it's not used in this component const [apiEndpoint, setApiEndpoint] = React.useState('https://api.ollama.com');
   const [useLocalModels, setUseLocalModels] = React.useState(false);
 
   const handleSave = () => {
@@ -37,7 +36,7 @@ export default function Settings() {
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-4"> <Link to="/"> <Button variant="outline">Cancel</Button>
+          <div className="flex justify-end gap-2 pt-4"> <Link to="/"> {/* Link back to home or previous page */} <Button variant="outline">Cancel</Button>
             </Link>
             <Button onClick={handleSave}>Save</Button>
           </div>

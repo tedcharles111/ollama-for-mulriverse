@@ -1,8 +1,8 @@
-import { useState } from 'react'; import { useOnlineModels } from '../contexts/OnlineModelsContext'; import { Button } from './ui/button'; import { Input } from './ui/input'; import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'; import { Download, Globe, HardDrive } from 'lucide-react'; import { useToast } from './ui/use-toast';
+import { useState } from 'react'; import { useOnlineModels } from '../contexts/OnlineModelsContext'; import { Button } from './ui/button'; import { Input } from './ui/input'; import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'; import { Download, Globe, HardDrive } from 'lucide-react'; // Ensure all icons are imported import { useToast } from './ui/use-toast';
 
 export default function ModelPicker() {
-  const { onlineModels, localModels, isLoading, error, refreshModels } = useOnlineModels();
   const [searchTerm, setSearchTerm] = useState('');
+  const { onlineModels, localModels, isLoading, error, refreshModels } = useOnlineModels();
   const { toast } = useToast();
 
   const filteredOnlineModels = onlineModels.filter(model =>
@@ -20,6 +20,7 @@ export default function ModelPicker() {
         description: `Starting download of ${modelName}`,
       });
 
+      // Simulate download (replace with actual API call if implementing client-side download)
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       toast({
@@ -30,7 +31,9 @@ export default function ModelPicker() {
       refreshModels();
     } catch (error) {
       toast({
-        title: "Download failed", description: "Please try again later", variant: "destructive",
+        title: "Download failed",
+        description: `Failed to download ${modelName}: ${(error as Error).message}`, // Cast error to Error
+        variant: "destructive",
       });
     }
   };
@@ -45,7 +48,7 @@ export default function ModelPicker() {
         />
       </div>
 
-      <Tabs defaultValue="online" className="space-y-4"> <TabsList className="grid w-full grid-cols-2"> <TabsTrigger value="online"> <Globe className="mr-2 h-4 w-4" />
+      <Tabs defaultValue="online" className="space-y-4"> {/* Correctly closed Tabs */} <TabsList className="grid w-full grid-cols-2"> <TabsTrigger value="online"> <Globe className="mr-2 h-4 w-4" />
             Online Models
           </TabsTrigger>
           <TabsTrigger value="local"> <HardDrive className="mr-2 h-4 w-4" />
@@ -58,22 +61,22 @@ export default function ModelPicker() {
             <div className="p-4 text-center text-gray-500">Loading online models...</div>
           ) : error ? (
             <div className="p-4 text-center text-red-500">Failed to load models: {error.message}</div>
-          : filteredOnlineModels.length === 0 ? (
-           div className="p-4 text-center text-gray-500">No models found</div>
- ) : (
-            <div className="space-y-2 max-h-9 overflow-auto">
+          ) : filteredOnlineModels.length === 0 ? (
+            <div className="p-4 text-center text-gray-500">No online models found</div>
+          ) : (
+            <div className="space-y-2 max-h-96 overflow-auto">
               {filteredOnlineModels.map(model => (
                 <div
                   key={model.name}
                   className={`p-3 rounded-lg border flex justify-between items-center`}
                 >
                   <div>
- <div className="font-medium">{model.name}</div> <div className="text-sm text-gray-500">
+                    <div className="font-medium">{model.name}</div> <div className="text-sm text-gray-500">
                       {model.details.parameter_size} • {model.details.family}
                     </div>
                   </div>
-                  <
-                    size="sm" ="outline"
+                  <Button
+                    size="sm" variant="outline"
                     onClick={() => handleDownload(model.name)}
                   >
                     <Download className="mr-2 h-4 w-4" />
@@ -85,7 +88,7 @@ export default function ModelPicker() {
           )}
         </TabsContent>
 
-        <TabsContent value="local" className="space-y2">
+        <TabsContent value="local" className="space-y-2">
           {isLoading ? (
             <div className="p-4 text-center text-gray-500">Loading local models...</div>
           ) : filteredLocalModels.length === 0 ? (

@@ -52,11 +52,12 @@ function LoginPage() {
         </form>
         <div className="text-center"> <p className="text-sm text-gray-600">
             Don't have an account?{' '}
-            <a href="/ className="text-blue-600 hover:underline">
+            <a href="/register" className="text-blue-600 hover:underline">
               Register
             </a>
           </p>
         </div>
       </div>
+    </div>
   );
 }

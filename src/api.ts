@@ -15,16 +15,19 @@ export interface Model {
 
 export async function fetchOnlineModels(): Promise<Model[]> {
   try {
-    const response = await fetch('https://api.ollama.com/api/tags'); if) throw new Error(' data = await response.json();
+    const response = await fetch('https://api.ollama.com/api/tags'); if (!response.ok) throw new Error('Failed to fetch online models');
+    const data = await response.json();
     return data.models.map((model: any) => ({
       ...model,
-      isLocal: false  } catch (error) {
+      isLocal: false
+    }));
+  } catch (error) {
     console.error('Error fetching online models:', error);
     return [];
   }
 }
 
-export async function fetchLocalModels(): Promise {
+export async function fetchLocalModels(): Promise<Model[]> {
   try {
     const response = await ollama.list();
     return response.models.map(model => ({

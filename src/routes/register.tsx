@@ -1,4 +1,5 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'; import { useAuth } from '../contexts/AuthContext'; import { Button } from '../components/ui/button'; import { Input } from '../components/ui/input'; import { useState } from 'react'; export const Route = createFileRoute('/register beforeLoad: ({ context }) => {
+import { createFileRoute, redirect } from '@tanstack/react-router'; import { useAuth } from '../contexts/AuthContext'; import { Button } from '../components/ui/button'; import { Input } from '../components/ui/input'; import { useState } from 'react'; export const Route = createFileRoute('/register')({
+  beforeLoad: ({ context }) => {
     if (context.auth.isAuthenticated) {
       throw redirect({ to: '/' });
     }

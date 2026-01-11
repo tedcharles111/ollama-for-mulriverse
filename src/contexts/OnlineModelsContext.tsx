@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'; import { useQuery } from '@tanstack/react-query'; import { fetchOnlineModels, fetchLocalModels } from '../api';
+import React, { createContext, useContext, useEffect, useState } from 'react'; import { useQuery } from '@tanstack/react-query'; import { fetchOnlineModels, fetchLocalModels, Model } from '../api';
 
 interface OnlineModelsContextType {
   onlineModels: Model[];
@@ -49,10 +49,10 @@ export function OnlineModelsProvider({ children }: { children: React.ReactNode }
       onlineModels,
       localModels,
       isLoading: onlineLoading || localLoading,
-      error: onlineError || localError,
+      error: onlineError,
       refreshModels
     }}>
-      {children}
+}
     </OnlineModelsContext.Provider>
   );
 }

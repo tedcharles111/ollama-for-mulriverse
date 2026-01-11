@@ -1,4 +1,4 @@
-import React from 'react'; import { RouterProvider, createRouter } from '@tanstack/react-router'; import { routeTree } from './routeTree.gen'; import { AuthProvider, useAuth } from './contexts/AuthContext'; import { OnlineModelsProvider } from './contexts/OnlineModelsContext';
+import { RouterProvider, createRouter } from '@tanstack/react-router'; import { routeTree } from './routeTree.gen'; import { AuthProvider, useAuth } from './contexts/AuthContext'; import { OnlineModelsProvider } from './contexts/OnlineModelsContext';
 
 const router = createRouter({
   routeTree,
@@ -8,11 +8,15 @@ const router = createRouter({
   }
 });
 
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
+
 function InnerApp() {
   const auth = useAuth();
-  const onlineModels = useOnlineModels();
-
-  return <RouterProvider router={router} context={{ auth, onlineModels }} />;
+  return <RouterProvider router={router} context={{ auth }} />;
 }
 
 export default function App() {

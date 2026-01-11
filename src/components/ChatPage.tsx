@@ -1,13 +1,6 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'; import { useAuth } from './contexts/AuthContext'; import ChatSidebar from './components/ChatSidebar'; import ModelPicker from './components/ModelPicker'; import MessageList from './components/MessageList'; import ChatForm from './components/ChatForm'; import Settings from './components/Settings'; export const Route = createFileRoute('/')({
-  beforeLoad: ({ context }) => {
-    if (!context.auth.isAuthenticated) {
-      throw redirect({ to: '/login' });
-    }
-  },
-  component: ChatPage
-});
+import { useAuth } from '../contexts/AuthContext'; import ChatSidebar from './ChatSidebar'; import ModelPicker from './ModelPicker'; import MessageList from './MessageList'; import ChatForm from './ChatForm';
 
-function ChatPage() {
+export default function ChatPage() {
   const { user } = useAuth();
 
   return (
@@ -24,7 +17,6 @@ function ChatPage() {
           <ChatForm />
         </footer>
       </div>
-      <Settings />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React from 'react'; import { Avatar, AvatarFallback } from './ui/avatar'; import { format } from 'date-fns'; import StreamingMarkdownContent from './StreamingMarkdownContent';
+import { Avatar, AvatarFallback } from './ui/avatar'; import { format } from 'date-fns'; import StreamingMarkdownContent from './StreamingMarkdownContent';
 
 interface MessageProps {
   content: string;

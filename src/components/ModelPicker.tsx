@@ -1,8 +1,9 @@
-import React, { useState } from 'react'; import { useOnlineModels } from '../contexts/OnlineModelsContext'; import { Button } from './ui/button'; import { Input } from './ui/input'; import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'; import { Download, Globe, HardDrive } from 'lucide-react'; import { useToast } from './ui/use-toast';
+import { useState } from 'react'; import { useOnlineModels } from '../contexts/OnlineModelsContext'; import { Button } from './ui/button'; import { Input } from './ui/input'; import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs'; // Ensure this path is correct import { Download, Globe, HardDrive } from 'lucide-react'; import { useToast } from './ui/use-toast';
 
 export default function ModelPicker() {
   const { onlineModels, localModels, isLoading, error, refreshModels } = useOnlineModels();
   const [searchTerm, setSearchTerm] = useState('');
+  // const [selectedModel, setSelectedModel] = useState<string | null>(null); // This was declared but not used for actual selection, commenting out for now.
   const { toast } = useToast();
 
   const filteredOnlineModels = onlineModels.filter(model =>
@@ -21,7 +22,8 @@ export default function ModelPicker() {
       });
 
       // In a real app, you would call the download API here
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // await downloadModel(modelName); // Uncomment if you have a backend endpoint for this
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate download
 
       toast({
         title: "Download complete",
@@ -58,7 +60,7 @@ export default function ModelPicker() {
           {isLoading ? (
             <div className="p-4 text-center text-gray-500">Loading online models...</div>
           ) : error ? (
-            <div className="p-4 text-center text-red-500">Failed to load models</div>
+            <div className="p-4 text-center text-red-500">Failed to load models: {error.message}</div>
           ) : filteredOnlineModels.length === 0 ? (
             <div className="p-4 text-center text-gray-500">No models found</div>
           ) : (

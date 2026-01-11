@@ -1,4 +1,7 @@
-import { Ollama } from 'ollama'; const ollama = new Ollama({ host: 'https://api.ollama.com' });
+import { Ollama } from 'ollama';
+
+// Ensure Ollama client for online interactions
+const onlineOllama = new Ollama({ host: 'https://api.ollama.com' });
 
 export interface Model {
   name: string;
@@ -13,13 +16,18 @@ export interface Model {
   isLocal?: boolean;
 }
 
+export interface AuthStatus {
+  isAuthenticated: boolean;
+  user?: { id: string; name: string };
+}
+
 export async function fetchOnlineModels(): Promise<Model[]> {
   try {
     const response = await fetch('https://api.ollama.com/api/tags'); if (!response.ok) throw new Error('Failed to fetch online models');
     const data = await response.json();
     return data.models.map((model: any) => ({
       ...model,
-      modified_at: model.modified_at.toString(),
+      modified_at: model.modified_at.toString(), // Ensure string type
       isLocal: false
     }));
   } catch (error) {
@@ -30,10 +38,12 @@ export async function fetchOnlineModels(): Promise<Model[]> {
 
 export async function fetchLocalModels(): Promise<Model[]> {
   try {
-    const response = await ollama.list();
+    // This client assumes local Ollama server is running on default port
+    const localOllama = new Ollama({ host: 'http://localhost:11434' });
+    const response = await localOllama.list();
     return response.models.map(model => ({
       ...model,
-      modified_at: model.modified_at.toString(),
+      modified_at: model.modified_at.toString(), // Ensure string type
       isLocal: true
     }));
   } catch (error) {
@@ -42,4 +52,34 @@ export async function fetchLocalModels(): Promise<Model[]> {
   }
 }
 
-// ... rest of the api.ts file remains the same ...
+export async function downloadModel(modelName: string): Promise<void> {
+  // Use a local Ollama client to pull models
+  const localOllama = new Ollama({ host: 'http://localhost:11434' });
+  await localOllama.pull({ model: modelName });
+}
+
+export async function checkAuthStatus(): Promise<AuthStatus> {
+  const response = await fetch('/api/auth/status');
+  if (!response.ok) return { isAuthenticated: false };
+  return response.json();
+}
+
+export async function generateChatCompletion(
+  model: string,
+  messages: Array<{ role: string; content: string }>,
+  isLocal: boolean,
+  onStream?: (chunk: string) => void
+) {
+  const host = isLocal ? 'http://localhost:11434' : 'https://api.ollama.com';
+  const ollamaInstance = new Ollama({ host });
+
+  const response = await ollamaInstance.chat({
+    model,
+    messages,
+    stream: true
+  });
+
+  for await (const chunk of response) {
+    onStream?.(chunk.message.content);
+  }
+}

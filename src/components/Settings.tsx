@@ -1,29 +1,29 @@
-import React from 'react'; import { Button } from './ui/button'; import { Input } from './ui/input'; import { Label } from './ui/label'; import { Switch } from './ui/switch'; import { useAuth } from '../contexts/AuthContext';
+import React from 'react'; // Keep React import for useState import { Button } from './ui/button'; import { Input } from './ui/input'; import { Label } from './ui/label'; // Ensure this path is correct import { Switch } from './ui/switch'; // Ensure this path is correct import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router';
 
 export default function Settings() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [apiEndpoint, setApiEndpoint] = React.useState('https://api.ollama.com');
   const [useLocalModels, setUseLocalModels] = React.useState(false);
 
   const handleSave = () => {
     // Save settings to localStorage or backend
-    localStorage.setItem('ollamaApiEndpoint', apiEndpoint); localStorage.setItem('useLocalModels', useLocalModels.toString());
+    localStorage.setItem('ollamaApiEndpoint', apiEndpoint); localStorage.setItem('useLocalModels', useLocalModels.toString()); alert('Settings saved!'); // Basic feedback
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"> <div className="bg-white rounded-lg p-6 w-full max-w-md"> <h2 className="text-xl font-bold mb-4">Settings</h2> <div className="space-y-4">
           <div>
-            <Label htmlFor="name">Name</Label> <Input id="name" value={user?.name} readOnly className="mt-1" />
+            <Label htmlFor="name">Name</Label> <Input id="name" value={user?.name || ''} readOnly className="mt-1" />
           </div>
 
           <div>
-            <Label htmlFor="email">Email</Label> <Input id="email" value={user?.id} readOnly className="mt-1" />
+            <Label htmlFor="email">Email</Label> <Input id="email" value={user?.id || ''} readOnly className="mt-1" />
           </div>
 
           <div>
             <Label htmlFor="apiEndpoint">Ollama API Endpoint</Label>
             <Input
-              id="apiEndpoint"
+              id="apiEndpoint" type="url" // Changed to url type for better input validation
               value={apiEndpoint}
               onChange={(e) => setApiEndpoint(e.target.value)}
               className="mt-1"
@@ -38,7 +38,8 @@ export default function Settings() {
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-4"> <Button variant="outline">Cancel</Button>
+          <div className="flex justify-end gap-2 pt-4"> <Link to="/"> {/* Link back to home or previous page */} <Button variant="outline">Cancel</Button>
+            </Link>
             <Button onClick={handleSave}>Save</Button>
           </div>
         </div>

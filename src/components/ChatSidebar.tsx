@@ -1,4 +1,4 @@
-import React from 'react'; import { Button } from './ui/button'; import { Plus, MessageSquare, Settings } from 'lucide-react'; import { useAuth } from '../contexts/AuthContext';
+import { Button } from './ui/button'; import { Plus, Settings } from 'lucide-react'; // Removed MessageSquare as it's unused import { useAuth } from '../contexts/AuthContext'; import { Link } from '@tanstack/react-router'; // Import Link for navigation
 
 export default function ChatSidebar() {
   const { logout } = useAuth();
@@ -15,19 +15,23 @@ export default function ChatSidebar() {
       </div>
       <div className="flex-1 overflow-auto">
         {chats.map(chat => (
-          <div
+          <Link
             key={chat.id}
-            className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
+            to="/c/$chatId"
+            params={{ chatId: chat.id }}
+            className="block p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100"
+            activeProps={{ className: 'bg-gray-100' }}
           >
             <div className="font-medium truncate">{chat.title}</div> <div className="text-xs text-gray-500">
               {chat.updatedAt.toLocaleDateString()}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
-      <div className="p-4 border-t border-gray-200 space-y-2"> <Button variant="ghost" className="w-full justify-start"> <Settings className="mr-2 h-4 w-4" />
-          Settings
-        </Button>
+      <div className="p-4 border-t border-gray-200 space-y-2"> <Link to="/settings" className="block w-full"> <Button variant="ghost" className="w-full justify-start"> <Settings className="mr-2 h-4 w-4" />
+            Settings
+          </Button>
+        </Link>
         <Button variant="ghost" className="w-full justify-start" onClick={logout}>
           Logout
         </Button>

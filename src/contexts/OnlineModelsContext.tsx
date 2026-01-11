@@ -4,14 +4,14 @@ interface OnlineModelsContextType {
   onlineModels: Model[];
   localModels: Model[];
   isLoading: boolean;
-  error: Error | null; // Added semicolon
+  error: Error | null;
   refreshModels: () => void;
 }
 
 const OnlineModelsContext = createContext<OnlineModelsContextType>(null!);
 
-export function OnlineModelsProvider({ children }: { children: React.ReactNode }) { // Added 'function' keyword
-  const [onlineModels, setOnlineModels] = useState<Model[]>([]); // Corrected variable name
+export function OnlineModelsProvider({ children }: { children: React.ReactNode }) {
+  const [onlineModels, setOnlineModels] = useState<Model[]>([]);
   const [localModels, setLocalModels] = useState<Model[]>([]);
 
   const {
@@ -19,22 +19,22 @@ export function OnlineModelsProvider({ children }: { children: React.ReactNode }
     isLoading: onlineLoading,
     error: onlineError,
     refetch: refetchOnline
-  } = useQuery({
+  } = useQuery<Model[]>({
     queryKey: ['onlineModels'],
     queryFn: fetchOnlineModels
   });
 
   const {
-    data: localData, // Corrected variable name
+    data: localData,
     isLoading: localLoading,
     error: localError,
     refetch: refetchLocal
-  } = useQuery({
-    queryKey: ['localModels'], // Corrected property name
+  } = useQuery<Model[]>({
+    queryKey: ['localModels'],
     queryFn: fetchLocalModels
   });
 
-  useEffect(() => { // Added parentheses for useEffect callback
+  useEffect(() => {
     if (onlineData) setOnlineModels(onlineData);
     if (localData) setLocalModels(localData);
   }, [onlineData, localData]);
@@ -49,7 +49,7 @@ export function OnlineModelsProvider({ children }: { children: React.ReactNode }
       onlineModels,
       localModels,
       isLoading: onlineLoading || localLoading,
-      error: onlineError || localError, // Added colon
+      error: onlineError || localError,
       refreshModels
     }}>
       {children}
@@ -57,6 +57,6 @@ export function OnlineModelsProvider({ children }: { children: React.ReactNode }
   );
 }
 
-export function useOnlineModels() { // Corrected function name for consistency
+export function useOnlineModels() {
   return useContext(OnlineModelsContext);
 }

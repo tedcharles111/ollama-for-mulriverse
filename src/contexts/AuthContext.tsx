@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'; import { useQuery } from '@tanstack/react-query'; import { checkAuthStatus } from '../api';
+import React, { createContext, useContext, useState, useEffect } from 'react'; import { useQuery } from '@tanstack/react-query'; import { checkAuthStatus, AuthStatus } from '../api'; // Import AuthStatus interface
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -13,15 +13,18 @@ const AuthContext = createContext<AuthContextType>(null!);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<{ id: string; name: string } | null>(null);
 
-  const { data: authStatus } = useQuery({
+  const { data: authStatus } = useQuery<AuthStatus>({ // Use AuthStatus for data type
     queryKey: ['authStatus'],
     queryFn: checkAuthStatus,
-    retry: false
+    retry: false,
+    staleTime: 5 * 60 * 1000 // 5 minutes
   });
 
   useEffect(() => {
-    if (authStatus?.user) {
+    if (authStatus?.isAuthenticated && authStatus.user) { // Check isAuthenticated first
       setUser(authStatus.user);
+    } else {
+      setUser(null);
     }
   }, [authStatus]);
 

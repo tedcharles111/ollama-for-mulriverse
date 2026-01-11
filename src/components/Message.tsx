@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from './ui/avatar'; import { format } from 'date-fns'; import StreamingMarkdownContent from './StreamingMarkdownContent';
+import { Avatar, AvatarFallback } from './ui/avatar'; // Ensure this path is correct import { format } from 'date-fns'; import StreamingMarkdownContent from './StreamingMarkdownContent';
 
 interface MessageProps {
   content: string;

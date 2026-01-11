@@ -1,4 +1,4 @@
-import React from 'react'; import Message from './Message'; import { useAuth } from '../contexts/AuthContext';
+import Message from './Message'; import { useAuth } from '../contexts/AuthContext';
 
 export default function MessageList() {
   const { user } = useAuth();

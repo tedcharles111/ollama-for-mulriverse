@@ -1,18 +1,17 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'; import { useQuery } from '@tanstack/react-query'; import { fetchOnlineModels, fetchLocalModels, Model } from '../api';
+import React, createContext, useContext, useEffect, useState } 'react'; import { useQuery } from '@tanstack/react-query'; import { fetchOnlineModels, fetchLocalModels, Model } from '../api';
 
 interface OnlineModelsContextType {
   onlineModels: Model[];
   localModels: Model[];
   isLoading: boolean;
-  error: Error | null;
-  refreshModels: () => void;
+  error: Error | null  refreshModels: () => void;
 }
 
 const OnlineModelsContext = createContext<OnlineModelsContextType>(null!);
 
-export function OnlineModelsProvider({ children }: { children: React.ReactNode }) {
-  const [onlineModels, setOnlineModels] = useState<Model[]>([]);
-  const [localModels, setLocalModels] = useState<Model[]>([]);
+export OnlineModelsProvider({ children }: { children: React.ReactNode }) {
+  const [online, setOnlineModels] = useState<Model[]>([]);
+ const [localModels, setLocalModels] = useState<Model[]>([]);
 
   const {
     data: onlineData,
@@ -25,21 +24,21 @@ export function OnlineModelsProvider({ children }: { children: React.ReactNode }
   });
 
   const {
-    data: localData,
+    data:Data,
     isLoading: localLoading,
     error: localError,
     refetch: refetchLocal
   } = useQuery({
-    queryKey: ['localModels'],
+   Key: ['localModels'],
     queryFn: fetchLocalModels
   });
 
-  useEffect(() => {
+  useEffect => {
     if (onlineData) setOnlineModels(onlineData);
     if (localData) setLocalModels(localData);
   }, [onlineData, localData]);
 
-  const refreshModels = () => {
+ const refreshModels = () => {
     refetchOnline();
     refetchLocal();
   };
@@ -49,14 +48,14 @@ export function OnlineModelsProvider({ children }: { children: React.ReactNode }
       onlineModels,
       localModels,
       isLoading: onlineLoading || localLoading,
-      error: onlineError,
+      error onlineError || localError,
       refreshModels
     }}>
-}
+      {children}
     </OnlineModelsContext.Provider>
   );
 }
 
-export function useOnlineModels() {
+export function useModels() {
   return useContext(OnlineModelsContext);
 }

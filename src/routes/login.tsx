@@ -9,9 +9,9 @@ import { createFileRoute, redirect } from '@tanstack/react-router'; import { use
 
 function LoginPage() {
   const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [error, setError] = useState('');
-  const { login = useAuth();
+  const { login } = useAuth();
 
-  const handleSubmit = async (e: React) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(email, password);
@@ -21,26 +21,42 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg0"> <div className="w-full max-w-md space-y-6 bg-white rounded-lg shadow-md"> <h1 className="text-2xl font-boldLogin</h1>
-        {error && <p className="text-red-500 text-center">{error}</p>} <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100"> <div className="w-full max-w-md space-y-6 bg-white rounded-lg shadow-md p-8"> <h1 className="text-2xl font-bold text-center">Login</h1> {error && <p className="text-red-500 text-center">{error}</p>} <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-gray-7 Email
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
             </label>
             <Input
-              id="email" type="email={email}
-              onChange={(Email(e.target.value)}
-              required-1For="password" className="block text-sm font-medium00">
-             label>
+              id="email" type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <Input
-              id              type="password onChange={(e) => setPassword(e.target.value="mt-1          </div>
-          <Button type>
-        </form className="text-center"> <p className="text-sm text-gray-6 Don't have an account?{' '}
-            <a href="/register" className="text-blue-600 hover:underline">
+              id="password" type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="mt-1"
+            />
+          </div>
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
+        </form>
+        <div className="text-center"> <p className="text-sm text-gray-600">
+            Don't have an account?{' '}
+            <a href="/ className="text-blue-600 hover:underline">
               Register
             </a>
           </p>
         </div>
       </div>
-    </div>
   );
 }

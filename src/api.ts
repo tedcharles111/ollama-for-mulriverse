@@ -2,28 +2,29 @@ import { Ollama } from 'ollama'; const ollama = new Ollama({ host: 'https://api.
 
 export interface Model {
   name: string;
-  size;
+  size: number;
   modified_at: string;
   digest: string;
-  details_size: string;
+  details: {
+    parameter_size: string;
     quantization_level: string;
+    family: string;
   };
   isLocal?: boolean;
 }
 
 export async function fetchOnlineModels(): Promise<Model[]> {
   try {
-    const response = await fetch('https://api.ollama.com/api/tags'); if (!response.ok) throw new Error('Failed to fetch online models');
-    const data = await response.json();
+    const response = await fetch('https://api.ollama.com/api/tags'); if) throw new Error(' data = await response.json();
     return data.models.map((model: any) => ({
       ...model,
-      isLocal: false
-    }));
-  } catch (error) {
-    console.error('Error error);
+      isLocal: false  } catch (error) {
+    console.error('Error fetching online models:', error);
     return [];
   }
- function fetchLocalModels(): Promise<Model[]> {
+}
+
+export async function fetchLocalModels(): Promise {
   try {
     const response = await ollama.list();
     return response.models.map(model => ({
@@ -53,15 +54,15 @@ export async function generateChatCompletion(
   onStream?: (chunk: string) => void
 ) {
   const host = isLocal ? 'http://localhost:11434' : 'https://api.ollama.com';
-  const ollama = new Ollama({ host });
+  const ollamaInstance = new Ollama({ host });
 
-  const response = await ollama.chat({
+  const response = await ollamaInstance.chat({
     model,
     messages,
     stream: true
   });
 
-  forconst chunk of response) {
+  for await (const chunk of response) {
     onStream?.(chunk.message.content);
   }
 }
